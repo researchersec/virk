@@ -1,0 +1,26 @@
+name: Check Website Accessibility
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # Runs every hour; adjust as needed
+  workflow_dispatch:
+
+jobs:
+  check-accessibility:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check if URL is accessible
+      run: |
+        url="https://datacvr.virk.dk/enhed/virksomhed/44743752?fritekst=*&sideIndex=0&startdatoFra=01%252F04%252F2024&startdatoTil=07%252F04%252F2024&size=10"
+        response=$(curl --write-out "%{http_code}" --silent --output /dev/null "$url")
+        echo "HTTP response code: $response"
+        if [ $response -ne 200 ]; then
+          echo "Website is not accessible or returned non-200 status."
+          exit 1
+        fi
+      env:
+        CURL_TIMEOUT: 10
+
+    - name: Success message
+      run: echo "Website is accessible."
