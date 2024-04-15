@@ -1,26 +1,42 @@
-name: Check Website Accessibility
+name: Install Chromium, Chromium-driver, and Selenium
 
 on:
-  schedule:
-    - cron: '0 * * * *'  # Runs every hour; adjust as needed
   workflow_dispatch:
 
 jobs:
-  check-accessibility:
+  install-packages:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check if URL is accessible
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+    - name: Update apt-get and install Chromium & Chromium-driver
       run: |
-        url="https://datacvr.virk.dk/enhed/virksomhed/44743752?fritekst=*&sideIndex=0&startdatoFra=01%252F04%252F2024&startdatoTil=07%252F04%252F2024&size=10"
-        response=$(curl --write-out "%{http_code}" --silent --output /dev/null "$url")
-        echo "HTTP response code: $response"
-        if [ $response -ne 200 ]; then
-          echo "Website is not accessible or returned non-200 status."
-          exit 1
-        fi
-      env:
-        CURL_TIMEOUT: 10
+        sudo apt-get update
+        sudo apt-get install -y chromium-browser chromium-chromedriver
+        
+    - name: Install Selenium
+      run: |
+        pip install selenium
 
-    - name: Success message
-      run: echo "Website is accessible."
+    - name: Install BS4
+      run: |
+        pip install beautifulsoup4
+        
+    - name: Install typing-extensions (new req)
+      run: | 
+        pip install typing-extensions
+        
+    - name: Download Chromedriver
+      run: |
+        wget https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip
+        unzip chromedriver_linux64.zip
+
+    - name: Run scraper.py
+      run: python scraper.py
+        #git config --global user.email "github-actions@github.com"
+        #git config --global user.name "GitHub Actions"
+        #git add supervin.db
+        #git commit -m "updated supervin.db"
+        #git push origin main
