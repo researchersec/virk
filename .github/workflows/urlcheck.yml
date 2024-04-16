@@ -19,13 +19,13 @@ jobs:
         architecture: 'x64'      # Adjust as needed, e.g., 'x86', 'x64', 'arm64'
 
     - name: Pull Docker image
-      run: docker pull ghcr.io/flaresolverr/flaresolverr:v3.3.16
+      run: docker pull ghcr.io/flaresolverr/flaresolverr:v3.3.17
 
     - name: Run FlareSolverr
-      run: docker run -d --name flaresolverr-container -p 8191:8191 ghcr.io/flaresolverr/flaresolverr:v3.3.16
+      run: docker run -d --name flaresolverr-container -p 8191:8191 ghcr.io/flaresolverr/flaresolverr:v3.3.17
 
     - name: Wait for FlareSolverr to start
-      run: sleep 20
+      run: sleep 10
 
     - name: Install req
       run: pip install requests
