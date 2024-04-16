@@ -1,42 +1,34 @@
-name: Install Chromium, Chromium-driver, and Selenium
+name: FlareSolverr Workflow
 
 on:
-  workflow_dispatch:
-
+  push:
+    branches:
+      - main
 jobs:
-  install-packages:
+  build:
     runs-on: ubuntu-latest
-
+    
     steps:
-    - name: Checkout code
+    - name: Checkout repository
       uses: actions/checkout@v2
-      
-    - name: Update apt-get and install Chromium & Chromium-driver
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y chromium-browser chromium-chromedriver
-        
-    - name: Install Selenium
-      run: |
-        pip install selenium
 
-    - name: Install BS4
-      run: |
-        pip install beautifulsoup4
-        
-    - name: Install typing-extensions (new req)
-      run: | 
-        pip install typing-extensions
-        
-    - name: Download Chromedriver
-      run: |
-        wget https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip
-        unzip chromedriver_linux64.zip
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.11'  # You can specify '3.11' or any later version you prefer
+        architecture: 'x64'      # Adjust as needed, e.g., 'x86', 'x64', 'arm64'
 
-    - name: Run scraper.py
+    - name: Pull Docker image
+      run: docker pull ghcr.io/flaresolverr/flaresolverr:v3.3.16
+
+    - name: Run FlareSolverr
+      run: docker run -d --name flaresolverr-container -p 8191:8191 ghcr.io/flaresolverr/flaresolverr:v3.3.16
+
+    - name: Wait for FlareSolverr to start
+      run: sleep 20
+
+    - name: Run Python script
       run: python scraper.py
-        #git config --global user.email "github-actions@github.com"
-        #git config --global user.name "GitHub Actions"
-        #git add supervin.db
-        #git commit -m "updated supervin.db"
-        #git push origin main
+      
+    - name: Fetch container logs 2
+      run: timeout 1m docker logs -f flaresolverr-container || true
