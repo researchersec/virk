@@ -4,7 +4,7 @@ import json
 # Adjust these variables according to your setup
 FLARE_SOLVERR_URL = "http://localhost:8191/v1"  # URL where FlareSolverr is listening
 COOKIE_URL = "https://datacvr.virk.dk"  # URL to get the cookies
-TARGET_URL = "https://datacvr.virk.dk/enhed/virksomhed/44743752?fritekst=*&sideIndex=0&startdatoFra=01%252F04%252F2024&startdatoTil=07%252F04%252F2024&size=10"
+TARGET_URL = "https://datacvr.virk.dk/soegeresultater?fritekst=*&sideIndex=0&size=10"
 
 def access_protected_page(cookie_url, target_url, flare_solverr_url):
     try:
