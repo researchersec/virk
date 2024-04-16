@@ -14,7 +14,7 @@ def access_protected_page(cookie_url, target_url, flare_solverr_url):
         data = {
             "cmd": "request.get",
             "url": cookie_url,
-            "maxTimeout": 60000,  # Milliseconds, adjust the timeout as needed
+            "maxTimeout": 1200000,  # Milliseconds, adjust the timeout as needed
         }
 
         # Sending request to FlareSolverr to get cookies
