@@ -1,22 +1,44 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
+import requests
+import json
 
-def simple_test(url):
-    service = Service(executable_path=r'chromedriver')
-    options = Options()
-    options.add_argument('--headless')
-    options.add_argument('--no-sandbox')
+# Adjust these variables according to your setup
+FLARE_SOLVERR_URL = "http://localhost:8191/v1"  # URL where FlareSolverr is listening
+TARGET_URL = "https://datacvr.virk.dk/enhed/virksomhed/44743752?fritekst=*&sideIndex=0&startdatoFra=01%252F04%252F2024&startdatoTil=07%252F04%252F2024&size=10"
 
-    driver = webdriver.Chrome(service=service, options=options)
+def access_protected_page(url, flare_solverr_url):
     try:
-        driver.get(url)
-        print("Page Title:", driver.title)  # Just print the title for now
-    except Exception as e:
-        print("An error occurred:", e)
-    finally:
-        driver.quit()
+        # Headers for the FlareSolverr POST request
+        headers = {"Content-Type": "application/json"}
+        # Data to send to FlareSolverr, requesting it to get the cookies and user-agent
+        data = {
+            "cmd": "request.get",
+            "url": url,
+            "maxTimeout": 60000,  # Milliseconds, adjust the timeout as needed
+        }
+
+        # Sending request to FlareSolverr
+        response = requests.post(flare_solverr_url, headers=headers, json=data)
+        response.raise_for_status()
+
+        # Parsing the response from FlareSolverr
+        response_data = json.loads(response.content)
+        cookies = {cookie["name"]: cookie["value"] for cookie in response_data["solution"]["cookies"]}
+        user_agent = response_data["solution"]["userAgent"]
+
+        # Now use the obtained cookies and user agent to make the actual request to the target site
+        result = requests.get(url, cookies=cookies, headers={"User-Agent": user_agent})
+        result.raise_for_status()
+
+        # You could do more processing with result.content or result.text here depending on your needs
+        print("Page successfully accessed.")
+        return result.text
+
+    except requests.exceptions.HTTPError as e:
+        print(f"HTTP Error: {e}")
+    except requests.exceptions.RequestException as e:
+        print(f"Error: {e}")
 
 if __name__ == "__main__":
-    url = "https://datacvr.virk.dk/enhed/virksomhed/44743752?fritekst=*&sideIndex=0&startdatoFra=01%252F04%252F2024&startdatoTil=07%252F04%252F2024&size=10"
-    simple_test(url)
+    html_content = access_protected_page(TARGET_URL, FLARE_SOLVERR_URL)
+    # Optionally, print the HTML content or process it further
+    print(html_content)
