@@ -24,7 +24,11 @@ def access_protected_page(cookie_url, target_url, flare_solverr_url):
         response_data = json.loads(response.content)
         cookies = {cookie["name"]: cookie["value"] for cookie in response_data["solution"]["cookies"]}
         user_agent = response_data["solution"]["userAgent"]
-
+        print("COOKIES:")
+        print(cookies)
+        print("USER AGENT:")
+        print(user_agent)
+        
         # Now use the obtained cookies and user agent to make the actual request to the target site
         result = requests.get(target_url, cookies=cookies, headers={"User-Agent": user_agent})
         result.raise_for_status()
