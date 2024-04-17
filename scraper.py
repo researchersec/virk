@@ -1,7 +1,6 @@
 import requests
 import json
 
-# Adjust these variables according to your setup
 FLARE_SOLVERR_URL = "http://localhost:8191/v1"  # URL where FlareSolverr is listening
 COOKIE_URL = "https://datacvr.virk.dk"  # URL to get the cookies
 TARGET_URL = "https://datacvr.virk.dk/soegeresultater?fritekst=*&sideIndex=0&size=10"
