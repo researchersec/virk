@@ -50,7 +50,7 @@ def get_cookies_with_user_agent(cookie_url):
                 raise
 
 # Example usage with your specific URL
-cookie_url = "https://datacvr.virk.dk/enhed/person/4000770103/deltager?fritekst=*&sideIndex=0&size=10"
+cookie_url = "https://datacvr.virk.dk/soegeresultater?fritekst=*&sideIndex=0&antalAnsatte=ANTAL_1000_999999&size=10"
 try:
     result = get_cookies_with_user_agent(cookie_url)
     logging.info("Final result obtained successfully.")
