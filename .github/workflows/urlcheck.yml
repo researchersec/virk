@@ -18,6 +18,9 @@ jobs:
         python-version: '3.11'  # You can specify '3.11' or any later version you prefer
         architecture: 'x64'      # Adjust as needed, e.g., 'x86', 'x64', 'arm64'
 
+    - name: Install req
+      run: pip install requests
+      
     - name: Pull Docker image
       run: docker pull ghcr.io/flaresolverr/flaresolverr:v3.3.17
 
@@ -26,9 +29,6 @@ jobs:
 
     - name: Wait for FlareSolverr to start
       run: sleep 10
-
-    - name: Install req
-      run: pip install requests
 
     - name: Run Python script
       run: python scraper.py
