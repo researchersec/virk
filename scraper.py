@@ -19,15 +19,15 @@ def send_request(url, data):
 def parse_html(html_content):
     """Parse HTML and extract all companies' data."""
     soup = BeautifulSoup(html_content, 'html.parser')
-    company_blocks = soup.find_all('div', class_='row', attrs={'data-v': '295c8b5e'})  # Adjust with actual class/attribute
+    company_blocks = soup.find_all('div', class_='row', attrs={'data-v': '295c8b5e'})  # Each company data block
     return [parse_company_data(block) for block in company_blocks]
 
 def parse_company_data(block):
     """Extract data from a single company block."""
     name_block = block.find('span', class_='bold value')
     name = name_block.text.strip() if name_block else 'N/A'
-    address_block = name_block.find_next_sibling('div')  # Assuming address follows name in HTML structure
-    address = address_block.text.strip() if address_block else 'N/A'
+    address_block = name_block.find_next('div')  # Assumes address is next div
+    address = address_block.text.strip().replace('<br>', ', ') if address_block else 'N/A'
     cvr_block = block.find('div', text='CVR-nummer:').find_next('div', class_='value')
     cvr = cvr_block.text.strip() if cvr_block else 'N/A'
     status_block = block.find('div', text='Status:').find_next('div', class_='value')
@@ -42,6 +42,7 @@ def parse_company_data(block):
         'Status': status,
         'Company Type': company_form
     }
+
 
 def fetch_page_data(page_url):
     """Fetch data for a single page."""
