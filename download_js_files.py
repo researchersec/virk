@@ -15,7 +15,7 @@ soup = BeautifulSoup(html_content, 'html.parser')
 base_url = "https://datacvr.virk.dk"
 
 # Directory to save the downloaded files
-save_dir = "downloaded_js"
+save_dir = "js"
 os.makedirs(save_dir, exist_ok=True)
 
 # Find all <link> elements that contain JS files
