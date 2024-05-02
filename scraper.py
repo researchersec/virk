@@ -69,7 +69,7 @@ def fetch_all_data(base_url, max_pages=100):
 
 def main():
     base_url = "https://datacvr.virk.dk/soegeresultater?fritekst=*&antalAnsatte=ANTAL_1000_999999&size=10"
-    results = fetch_all_data(base_url)
+    results = fetch_page_data(base_url)
     logging.info("Successfully retrieved all data.")
     print(results)
 
