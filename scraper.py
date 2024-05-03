@@ -60,14 +60,17 @@ def fetch_page_data(page_url):
     #response = send_request(FLARE_SOLVERR_URL, data)
     logging.info(f"Sending request to {page_url}.")
     response = requests.post(FLARE_SOLVERR_URL, headers=headers, json=data)
-    print("waiting 30 - first")
+    logging.info(f"Waiting 30s 1/2.")
     time.sleep(30)
     #response.raise_for_status()
+    logging.info(f"json_response")
     json_response = response.json()
-    print("waiting 30 - second")
+    logging.info(f"Waiting 30s 2/2.")
     time.sleep(30)
     if json_response.get("status") == "ok":
+        logging.info(f"Response OK.")
         html = json_response["solution"]["response"]
+        logging.info(f"End.")
         return BeautifulSoup(html, "lxml")
 #return parse_html(response['solution']['response'])
 
