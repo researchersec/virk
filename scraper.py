@@ -58,8 +58,12 @@ def fetch_page_data(page_url):
     }
     #response = send_request(FLARE_SOLVERR_URL, data)
     response = requests.post(FLARE_SOLVERR_URL, headers=headers, json=data)
+    print("waiting 30 - first")
+    time.sleep(30)
     response.raise_for_status()
     json_response = response.json()
+    print("waiting 30 - second")
+    time.sleep(30)
     if json_response.get("status") == "ok":
         html = json_response["solution"]["response"]
         return BeautifulSoup(html, "lxml")
