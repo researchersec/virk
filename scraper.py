@@ -49,7 +49,7 @@ def fetch_page_data(page_url):
     data = {
         "cmd": "request.get",
         "url": page_url,
-        "maxTimeout": 60000
+        "maxTimeout": 90000
     }
     response = send_request(FLARE_SOLVERR_URL, data)
     return parse_html(response['solution']['response'])
