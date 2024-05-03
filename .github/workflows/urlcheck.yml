@@ -33,6 +33,9 @@ jobs:
     - name: Wait for FlareSolverr to start
       run: sleep 20
 
+    - name: Fetch container logs 1
+      run: timeout 1m docker logs -f flaresolverr-container || true 
+
     - name: Run Python script
       run: python scraper.py
       
