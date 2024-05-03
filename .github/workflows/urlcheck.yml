@@ -15,8 +15,8 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.11'  # You can specify '3.11' or any later version you prefer
-        architecture: 'x64'      # Adjust as needed, e.g., 'x86', 'x64', 'arm64'
+        python-version: '3.11'
+        architecture: 'x64'
 
     - name: Install req
       run: pip install requests
@@ -28,12 +28,16 @@ jobs:
       run: docker pull ghcr.io/flaresolverr/flaresolverr:v3.3.17
 
     - name: Run FlareSolverr
-      run: docker run -d --name flaresolverr-container -p 8191:8191 ghcr.io/flaresolverr/flaresolverr:v3.3.17
+      run: >
+        docker run -d --name flaresolverr-container -p 8191:8191
+        -e LOG_LEVEL=debug
+        --log-driver=json-file --log-opt max-size=50m --log-opt max-file=3
+        ghcr.io/flaresolverr/flaresolverr:v3.3.17
 
     - name: Wait for FlareSolverr to start
       run: sleep 20
 
-    #- name: Fetch container logs 1
+    #- name: Fetch container logs 1 (Commented out if not needed)
       #run: timeout 1m docker logs -f flaresolverr-container || true 
 
     - name: Run Python script
