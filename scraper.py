@@ -52,7 +52,12 @@ def fetch_page_data(page_url):
         "maxTimeout": 90000
     }
     response = send_request(FLARE_SOLVERR_URL, data)
-    return parse_html(response['solution']['response'])
+    response.raise_for_status()
+    json_response = response.json()
+    if json_response.get("status") == "ok":
+        html = json_response["solution"]["response"]
+        return BeautifulSoup(html, "lxml")
+#return parse_html(response['solution']['response'])
 
 def fetch_all_data(base_url, max_pages=100):
     """Fetch data across multiple pages."""
