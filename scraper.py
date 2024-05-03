@@ -58,10 +58,11 @@ def fetch_page_data(page_url):
         "maxTimeout": 90000
     }
     #response = send_request(FLARE_SOLVERR_URL, data)
+    logging.info(f"Sending request to {page_url}.")
     response = requests.post(FLARE_SOLVERR_URL, headers=headers, json=data)
     print("waiting 30 - first")
     time.sleep(30)
-    response.raise_for_status()
+    #response.raise_for_status()
     json_response = response.json()
     print("waiting 30 - second")
     time.sleep(30)
