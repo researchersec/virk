@@ -47,10 +47,10 @@ def parse_company_data(block):
 def fetch_page_data(page_url):
     """Fetch data for a single page."""
 
-    headers = {
-        "referer": "https://datacvr.virk.dk",
-        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
-    }
+    #headers = {
+    #    "referer": "https://datacvr.virk.dk",
+    #    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+    #}
     data = {
         "cmd": "request.get",
         "url": page_url,
