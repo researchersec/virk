@@ -58,7 +58,7 @@ def fetch_page_data(page_url):
     }
     #response = send_request(FLARE_SOLVERR_URL, data)
     logging.info(f"Sending request to {page_url}.")
-    response = requests.post(FLARE_SOLVERR_URL, headers=headers, json=data)
+    response = requests.post(FLARE_SOLVERR_URL, headers=HEADERS, json=data)
     #logging.info(f"Waiting 30s 1/2.")
     #time.sleep(30)
     #response.raise_for_status()
