@@ -4,10 +4,20 @@ on:
   push:
     branches:
       - main
+
 jobs:
   build:
     runs-on: ubuntu-latest
     
+    container:
+      image: ghcr.io/flaresolverr/flaresolverr:latest
+      env:
+        LOG_LEVEL: debug
+        LOG_HTML: true
+        TZ: Europe/Copenhagen
+        BROWSER_TIMEOUT: 200000
+        LANG: da_DK
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -24,16 +34,6 @@ jobs:
     - name: Install bs4
       run: pip install beautifulsoup4
 
-    - name: Pull Docker image
-      run: docker pull ghcr.io/flaresolverr/flaresolverr:v3.3.17
-
-    - name: Run FlareSolverr
-      run: >
-        docker run -d --name flaresolverr-container -p 8191:8191
-        -e LOG_LEVEL=debug
-        --log-driver=json-file --log-opt max-size=50m --log-opt max-file=3
-        ghcr.io/flaresolverr/flaresolverr:v3.3.17
-
     - name: Wait for FlareSolverr to start
       run: sleep 20
 
@@ -44,4 +44,4 @@ jobs:
       run: python scraper.py
       
     - name: Fetch container logs 2
-      run: timeout 1m docker logs -f flaresolverr-container || true
+      run: timeout 1m docker logs -f ${{ runner.container_id }} || true
