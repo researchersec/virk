@@ -4,7 +4,6 @@ import logging
 import json
 import time
 
-# Setup basic configuration for logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 FLARE_SOLVERR_URL = "http://localhost:8191/v1"
