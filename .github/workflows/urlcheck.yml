@@ -23,10 +23,10 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.11'
-        architecture: 'x64'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y python3
+        sudo apt-get install -y python3-pip
 
     - name: Install req
       run: pip install requests
@@ -44,4 +44,4 @@ jobs:
       run: python scraper.py
       
     - name: Fetch container logs 2
-      run: timeout 1m docker logs -f ${{ runner.container_id }} || true
+      run: docker logs -f ${{ runner.container_id }}
