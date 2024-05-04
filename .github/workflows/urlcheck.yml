@@ -9,30 +9,34 @@ jobs:
   build:
     runs-on: ubuntu-latest
     
-    container:
-      image: ghcr.io/flaresolverr/flaresolverr:latest
-      env:
-        LOG_LEVEL: debug
-        LOG_HTML: true
-        TZ: Europe/Copenhagen
-        BROWSER_TIMEOUT: 200000
-        LANG: da_DK
-
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
 
     - name: Set up Python
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y python3
-        sudo apt-get install -y python3-pip
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.11'
+        architecture: 'x64'
 
     - name: Install req
       run: pip install requests
 
     - name: Install bs4
       run: pip install beautifulsoup4
+
+    - name: Pull Docker image
+      run: docker pull ghcr.io/flaresolverr/flaresolverr:latest
+
+    - name: Run FlareSolverr container
+      run: |
+        docker run -d --name flaresolverr-container -p 8191:8191 \
+        -e LOG_LEVEL=debug \
+        -e LOG_HTML=true \
+        -e TZ=Europe/Copenhagen \
+        -e BROWSER_TIMEOUT=200000 \
+        -e LANG=da_DK \
+        ghcr.io/flaresolverr/flaresolverr:latest
 
     - name: Wait for FlareSolverr to start
       run: sleep 20
@@ -44,4 +48,4 @@ jobs:
       run: python scraper.py
       
     - name: Fetch container logs 2
-      run: docker logs -f ${{ runner.container_id }}
+      run: timeout 1m docker logs -f flaresolverr-container || true
