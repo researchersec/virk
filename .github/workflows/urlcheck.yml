@@ -35,7 +35,7 @@ jobs:
         -e LOG_HTML=true \
         -e TZ=Europe/Copenhagen \
         -e BROWSER_TIMEOUT=200000 \
-        -e LANG=da_DK \
+        -e LANG=en_US \
         ghcr.io/flaresolverr/flaresolverr:latest
 
     - name: Wait for FlareSolverr to start
