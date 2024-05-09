@@ -34,9 +34,7 @@ jobs:
         docker run -d --name flaresolverr-container -p 8191:8191 \
         -e LOG_LEVEL=debug \
         -e LOG_HTML=true \
-        -e TZ=Europe/Copenhagen \
         -e BROWSER_TIMEOUT=200000 \
-        -e LANG=da_DK \
         docker.io/uruknara/flaresolverr:fixlooping
 
     - name: Wait for FlareSolverr to start
