@@ -36,7 +36,7 @@ jobs:
         -e LOG_HTML=true \
         -e TZ=Europe/Copenhagen \
         -e BROWSER_TIMEOUT=200000 \
-        -e LANG=en_US \
+        -e LANG=da_DK \
         docker.io/uruknara/flaresolverr:fixlooping
 
     - name: Wait for FlareSolverr to start
