@@ -13,7 +13,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install git
 
       - name: Clone FlareSolverr repository
-        run: git clone https://github.com/FlareSolverr/FlareSolverr.git
+        run: git clone https://github.com/researchersec/FlareSolverr.git
         working-directory: ${{ github.workspace }}
 
       - name: Set up Python
