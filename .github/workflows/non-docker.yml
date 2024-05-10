@@ -6,11 +6,12 @@ jobs:
   setup-and-run:
     runs-on: ubuntu-latest  # Restricts to run only on Ubuntu (Linux)
     steps:
-      - name: Checkout FlareSolverr repository
-        uses: actions/checkout@v3
-        with:
-          repository: 'FlareSolverr/FlareSolverr'
-          ref: 'main'
+      - name: Install Git
+        run: sudo apt-get update && sudo apt-get install git
+
+      - name: Clone FlareSolverr repository
+        run: git clone https://github.com/FlareSolverr/FlareSolverr.git
+        working-directory: ${{ github.workspace }}
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -18,9 +19,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install Chromium
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y chromium-browser
+        run: sudo apt-get install -y chromium-browser
 
       - name: Install Xvfb
         run: sudo apt-get install -y xvfb
@@ -28,7 +27,7 @@ jobs:
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r FlareSolverr/requirements.txt
 
       - name: Start FlareSolverr
-        run: python src/flaresolverr.py
+        run: python FlareSolverr/src/flaresolverr.py
