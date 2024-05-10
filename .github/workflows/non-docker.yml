@@ -21,7 +21,7 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install Chromium
+      - name: Install Chromi
         run: sudo apt-get install -y chromium-browser
 
       - name: Install Xvfb
