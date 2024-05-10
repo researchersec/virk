@@ -4,56 +4,31 @@ on: [push, pull_request]
 
 jobs:
   setup-and-run:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ubuntu-latest  # Restricts to run only on Ubuntu (Linux)
     steps:
-      - name: Install Git
-        run: |
-          if [ "$RUNNER_OS" = "Linux" ]; then
-            sudo apt-get update && sudo apt-get install -y git
-          elif [ "$RUNNER_OS" = "Windows" ]; then
-            choco install git
-          elif [ "$RUNNER_OS" = "macOS" ]; then
-            brew install git
-          fi
+      - name: Checkout FlareSolverr repository
+        uses: actions/checkout@v3
+        with:
+          repository: 'FlareSolverr/FlareSolverr'
+          ref: 'main'
 
-      - name: Clone FlareSolverr repository
-        run: git clone https://github.com/FlareSolverr/FlareSolverr.git
-        working-directory: ${{ github.workspace }}
-      
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-      
-      - name: Install Chrome or Chromium
-        run: |
-          if [ "$RUNNER_OS" = "Linux" ]; then
-            sudo apt-get update
-            sudo apt-get install -y chromium-browser
-          elif [ "$RUNNER_OS" = "Windows" ]; then
-            choco install googlechrome
-          elif [ "$RUNNER_OS" = "macOS" ]; then
-            brew install --cask google-chrome
-          fi
 
-      - name: Install Xvfb (Linux only)
-        if: runner.os == 'Linux'
+      - name: Install Chromium
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y chromium-browser
+
+      - name: Install Xvfb
         run: sudo apt-get install -y xvfb
-      
-      - name: Install XQuartz (macOS only)
-        if: runner.os == 'macOS'
-        run: brew install --cask xquartz
 
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r FlareSolverr/requirements.txt
-      
-      - name: Run scripts simultaneously
-        run: |
-          python FlareSolverr/src/flaresolverr.py &
-          python scraper.py
+          pip install -r requirements.txt
 
+      - name: Start FlareSolverr
+        run: python src/flaresolverr.py
