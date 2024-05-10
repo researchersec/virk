@@ -35,6 +35,7 @@ jobs:
 
       - name: Run scripts simultaneously with delay
         run: |
+          export LOG_HTML=true
           export LOG_LEVEL=debug
           export LANG=en_GB
           python FlareSolverr/src/flaresolverr.py &
