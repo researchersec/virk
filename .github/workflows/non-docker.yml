@@ -29,5 +29,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r FlareSolverr/requirements.txt
 
-      - name: Start FlareSolverr
-        run: python FlareSolverr/src/flaresolverr.py
+      - name: Run scripts simultaneously
+        run: |
+          python FlareSolverr/src/flaresolverr.py &
+          python scraper.py
+
