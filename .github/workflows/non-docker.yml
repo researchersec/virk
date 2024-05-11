@@ -36,7 +36,7 @@ jobs:
       - name: Run scripts simultaneously with delay
         run: |
           export LOG_HTML=true
-          export LOG_LEVEL=debug
+          export LOG_LEVEL=full
           export LANG=da_DK
           python FlareSolverr/src/flaresolverr.py &
           sleep 10  # Delays the next command for 10 seconds
