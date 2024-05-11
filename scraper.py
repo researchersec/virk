@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import logging
+import time
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -17,7 +18,9 @@ def fetch_page_data(page_url):
     logging.info(f"Sending request to {page_url}.")
     response = requests.post(FLARE_SOLVERR_URL, headers=HEADERS, json=data)
     logging.info(f"json_response")
+    time.sleep(30)
     json_response = response.json()
+    time.sleep(30)
     if json_response.get("status") == "ok":
         logging.info(f"Response OK.")
         html = json_response["solution"]["response"]
