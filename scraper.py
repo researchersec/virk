@@ -11,7 +11,7 @@ HEADERS = {"Content-Type": "application/json"}
 def get_cookies_from_virk():
     """Get cookies from virk.dk homepage."""
     logging.info("Fetching cookies from virk.dk.")
-    initial_page = "https://virk.dk"
+    initial_page = "https://datacvr.virk.dk"
     response = requests.get(initial_page)
     if response.ok:
         logging.info("Cookies fetched successfully.")
