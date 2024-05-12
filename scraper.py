@@ -8,21 +8,33 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 FLARE_SOLVERR_URL = "http://localhost:8191/v1"
 HEADERS = {"Content-Type": "application/json"}
 
-def fetch_page_data(page_url):
-    """Fetch data for a single page."""
+def get_cookies_from_virk():
+    """Get cookies from virk.dk homepage."""
+    logging.info("Fetching cookies from virk.dk.")
+    initial_page = "https://virk.dk"
+    response = requests.get(initial_page)
+    if response.ok:
+        logging.info("Cookies fetched successfully.")
+    else:
+        logging.error("Failed to fetch cookies from virk.dk.")
+    return response.cookies
+
+def fetch_page_data(page_url, cookies):
+    """Fetch data for a single page using FlareSolverr with cookies."""
     data = {
         "cmd": "request.get",
         "url": page_url,
-        "maxTimeout": 150000
+        "maxTimeout": 150000,
+        "cookies": [{"name": c.name, "value": c.value, "domain": c.domain} for c in cookies]
     }
     logging.info(f"Sending request to {page_url}.")
     response = requests.post(FLARE_SOLVERR_URL, headers=HEADERS, json=data)
-    logging.info(f"json_response")
+    logging.info("Response received.")
     time.sleep(30)
     json_response = response.json()
     time.sleep(30)
-    if json_response.get("status") == "ok":
-        logging.info(f"Response OK.")
+    if json_entry := json_response.get("status") == "ok":
+        logging.info("Response OK.")
         html = json_response["solution"]["response"]
         soup = BeautifulSoup(html, "lxml")
         rows = soup.find_all("div", class_="col-12 col-lg-4")
@@ -45,13 +57,13 @@ def fetch_page_data(page_url):
         logging.error("Failed to fetch data.")
         return None
 
-def fetch_all_data(base_url):
-    """Fetch data across multiple pages."""
+def fetch_all_data(base_url, cookies):
+    """Fetch data across multiple pages with cookies."""
     all_results = []
     page_number = 0
     while True:
         page_url = f"{base_url}&sideIndex={page_number}"
-        page_data = fetch_page_data(page_url)
+        page_data = fetch_page_data(page_url, cookies)
         if not page_data:
             logging.info("No more data to fetch, stopping.")
             break
@@ -62,7 +74,8 @@ def fetch_all_data(base_url):
 
 def main():
     base_url = "https://datacvr.virk.dk/soegeresultater?fritekst=*&antalAnsatte=ANTAL_1000_999999&size=10"
-    results = fetch_all_data(base_url)
+    cookies = get_cookies_from_virk()
+    results = fetch_all_data(base_url, cookies)
     logging.info("Successfully retrieved all data.")
     
     # Save results to a file
