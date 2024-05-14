@@ -1,5 +1,6 @@
 import requests
 import json
+import time
 
 def get_cookies_with_user_agent(cookie_url):
     # Constant URL for FlareSolverr
@@ -36,6 +37,9 @@ def make_authenticated_request(target_url, cookie_url):
     headers = {
         "User-Agent": user_agent
     }
+
+    # Wait for 10 seconds to ensure the content is loaded dynamically
+    time.sleep(10)
     
     # Making a new request with the obtained cookies and user-agent
     response = requests.get(target_url, headers=headers, cookies=cookies)
@@ -45,7 +49,7 @@ def make_authenticated_request(target_url, cookie_url):
 
 # Example usage
 cookie_url = "https://datacvr.virk.dk/enhed/person/4000770103/deltager?fritekst=*&sideIndex=0&size=10"
-target_url = "https://datacvr.virk.dk/soegeresultater?fritekst=*&sideIndex=0&size=100"
+target_url = "https://datacvr.virk.dk/soegeresultater?fritekst=*&sideIndex=0&size=10"
 
 try:
     result = make_authenticated_request(target_url, cookie_url)
