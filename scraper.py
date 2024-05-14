@@ -54,5 +54,8 @@ target_url = "https://datacvr.virk.dk/soegeresultater?fritekst=*&sideIndex=0&siz
 try:
     result = make_authenticated_request(target_url, cookie_url)
     print(result)  # Print the result to see the response from the target URL
+    # Write the result to a file to avoid truncation in the console
+    with open("response_content.html", "wb") as file:
+        file.write(result)
 except Exception as e:
     print(f"An error occurred: {e}")
