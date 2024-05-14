@@ -25,6 +25,9 @@ jobs:
     - name: Install bs4
       run: pip install beautifulsoup4
 
+    - name: lxml
+      run: pip install lxml
+
     - name: Pull Docker image
       run: docker pull juanfrillaaa/flaresolverr:latest
       #run: docker pull ghcr.io/flaresolverr/flaresolverr:latest
