@@ -38,14 +38,26 @@ def make_authenticated_request(target_url, cookie_url):
         "User-Agent": user_agent
     }
 
-    # Wait for 10 seconds to ensure the content is loaded dynamically
-    time.sleep(10)
-    
-    # Making a new request with the obtained cookies and user-agent
-    response = requests.get(target_url, headers=headers, cookies=cookies)
-    response.raise_for_status()  # Raise an exception if the request failed
-    
-    return response.content  # Or response.json() if the response is in JSON format
+    # Use FlareSolverr to make the request to the target URL
+    FLARE_SOLVERR_URL = "http://localhost:8191/v1"
+
+    # Data to send to FlareSolverr for the target URL
+    data = {
+        "cmd": "request.get",
+        "url": target_url,
+        "maxTimeout": 60000,  # Milliseconds, adjust the timeout as needed
+        "cookies": response_data['solution']['cookies'],  # Send cookies retrieved from the first request
+        "headers": headers  # Send the user-agent header
+    }
+
+    # Sending request to FlareSolverr to get the target URL content
+    response = requests.post(FLARE_SOLVERR_URL, headers=headers, json=data)
+    response.raise_for_status()  # This will raise an exception if the request failed
+
+    # Parsing the response from FlareSolverr
+    response_data = response.json()
+
+    return response_data['solution']['response']  # Return the response content
 
 # Example usage
 cookie_url = "https://datacvr.virk.dk/enhed/person/4000770103/deltager?fritekst=*&sideIndex=0&size=10"
@@ -55,7 +67,7 @@ try:
     result = make_authenticated_request(target_url, cookie_url)
     print(result)  # Print the result to see the response from the target URL
     # Write the result to a file to avoid truncation in the console
-    with open("response_content.html", "wb") as file:
+    with open("response_content.html", "w", encoding="utf-8") as file:
         file.write(result)
 except Exception as e:
     print(f"An error occurred: {e}")
