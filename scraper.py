@@ -13,14 +13,14 @@ def fetch_page_data(page_url):
     data = {
         "cmd": "request.get",
         "url": page_url,
-        "maxTimeout": 150000
+        "maxTimeout": 300000  # Increase the max timeout to ensure the page loads completely
     }
     logging.info(f"Sending request to {page_url}.")
     response = requests.post(FLARE_SOLVERR_URL, headers=HEADERS, json=data)
-    logging.info(f"json_response")
+    logging.info("Received response from FlareSolverr.")
     time.sleep(10)
+    
     json_response = response.json()
-    time.sleep(10)
     if json_response.get("status") == "ok":
         logging.info("Response OK.")
         html = json_response["solution"]["response"]
@@ -47,7 +47,7 @@ def fetch_page_data(page_url):
             status_column = row.find("div", class_="col-12 col-lg-2", string=lambda text: "Status:" in text)
             status = status_column.find("div", class_="value").text.strip() if status_column else "N/A"
             type_column = row.find("div", class_="col-12 col-lg-3")
-            company_type = type_column.find("div", class_="value").text.strip() if type_pos else "N/A"
+            company_type = type_column.find("div", class_="value").text.strip() if type_column else "N/A"
             
             results.append({
                 "company_name": company_name,
@@ -77,11 +77,9 @@ def fetch_all_data(base_url):
     return all_results
 
 def main():
-    #&antalAnsatte=ANTAL_1000_999999
     base_url = "https://datacvr.virk.dk/soegeresultater?fritekst=*&enhedstype=virksomhed&size=100"
     results = fetch_all_data(base_url)
     logging.info("Successfully retrieved all data.")
-    
     
 
 if __name__ == "__main__":
