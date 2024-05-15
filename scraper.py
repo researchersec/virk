@@ -25,7 +25,7 @@ def get_cookies_with_user_agent(cookie_url):
 
     return response_data
 
-def make_authenticated_request(target_url, cookie_url):
+def make_authenticated_request(target_url, cookie_url, wait_selector):
     # Get cookies and user-agent using FlareSolverr
     response_data = get_cookies_with_user_agent(cookie_url)
     
@@ -47,7 +47,8 @@ def make_authenticated_request(target_url, cookie_url):
         "url": target_url,
         "maxTimeout": 60000,  # Milliseconds, adjust the timeout as needed
         "cookies": response_data['solution']['cookies'],  # Send cookies retrieved from the first request
-        "headers": headers  # Send the user-agent header
+        "headers": headers,  # Send the user-agent header
+        "waitForSelector": wait_selector,  # Wait for the specific element to be loaded
     }
 
     # Sending request to FlareSolverr to get the target URL content
@@ -62,9 +63,10 @@ def make_authenticated_request(target_url, cookie_url):
 # Example usage
 cookie_url = "https://datacvr.virk.dk/enhed/person/4000770103/deltager?fritekst=*&sideIndex=0&size=10"
 target_url = "https://datacvr.virk.dk/soegeresultater?fritekst=*&sideIndex=0&size=10"
+wait_selector = "div.soegeresultaterTabel[data-cy='soegeresultater-tabel']"  # Selector for the element indicating data is loaded
 
 try:
-    result = make_authenticated_request(target_url, cookie_url)
+    result = make_authenticated_request(target_url, cookie_url, wait_selector)
     print(result)  # Print the result to see the response from the target URL
     # Write the result to a file to avoid truncation in the console
     with open("response_content.html", "w", encoding="utf-8") as file:
