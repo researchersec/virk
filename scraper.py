@@ -26,12 +26,18 @@ def fetch_page_data(page_url):
         html = json_response["solution"]["response"]
         soup = BeautifulSoup(html, "lxml")
 
-        # Debugging line to check the soup content
-        #print(soup.prettify())  # This should show you the parsed HTML structure
-        # Write to a file
-        with open('soup.html', 'w', encoding='utf-8') as file:
+        # Save the full HTML response to a file for debugging
+        with open('full_response.html', 'w', encoding='utf-8') as file:
             file.write(soup.prettify())
 
+        # Check for the presence of JavaScript indicators
+        scripts = soup.find_all('script')
+        if scripts:
+            logging.info(f"Found {len(scripts)} <script> tags in the response.")
+        else:
+            logging.error("No <script> tags found in the response.")
+
+        # Attempt to find the data table
         table = soup.find("div", class_="soegeresultaterTabel")
         if not table:
             logging.error("The data table was not found in the HTML.")
