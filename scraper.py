@@ -13,7 +13,7 @@ def fetch_page_data(page_url):
     data = {
         "cmd": "request.get",
         "url": page_url,
-        "maxTimeout": 300000  #Increase the max timeout to ensure the page loads completely
+        "maxTimeout": 300000  # Increase the max timeout to ensure the page loads completely
     }
     logging.info(f"Sending request to {page_url}.")
     response = requests.post(FLARE_SOLVERR_URL, headers=HEADERS, json=data)
@@ -50,7 +50,7 @@ def fetch_page_data(page_url):
             address = row.find("div").find_next("div").text.strip().replace('<br>', ', ')
             cvr_column = row.find("div", class_="col-12 col-lg-2")
             cvr_number = cvr_column.find("div", class_="value").text.strip() if cvr_column else "N/A"
-            status_column = row.find("div", class_="col-12 col-lg-2", string=lambda text: "Status:" in text)
+            status_column = row.find("div", class_="col-12 col-lg-2", string=lambda text: text and "Status:" in text)
             status = status_column.find("div", class_="value").text.strip() if status_column else "N/A"
             type_column = row.find("div", class_="col-12 col-lg-3")
             company_type = type_column.find("div", class_="value").text.strip() if type_column else "N/A"
@@ -58,8 +58,8 @@ def fetch_page_data(page_url):
             results.append({
                 "company_name": company_name,
                 "address": address,
-                "cvr_number": cvr_number, 
-                "status": status, 
+                "cvr_number": cvr_number,
+                "status": status,
                 "company_type": company_type
             })
         return results
@@ -86,7 +86,6 @@ def main():
     base_url = "https://datacvr.virk.dk/soegeresultater?fritekst=*&enhedstype=virksomhed&size=100"
     results = fetch_all_data(base_url)
     logging.info("Successfully retrieved all data.")
-    
 
 if __name__ == "__main__":
     main()
