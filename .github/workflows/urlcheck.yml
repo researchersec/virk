@@ -51,3 +51,11 @@ jobs:
       
     - name: Fetch container logs 2
       run: timeout 1m docker logs -f flaresolverr-container || true
+ 
+    - name: Commit and push
+      run: |
+        git config --local user.email "hojlund123@live.dk"
+        git config --local user.name "researchersec[bot]"
+        git add "full_response.html"
+        git commit -m "Added full_response.html"
+        git push
