@@ -79,14 +79,14 @@ def fetch_all_data(base_url):
             break
         all_results.extend(page_data)
         logging.info(f"Data from page {page_number} fetched successfully.")
+        print(results)
         page_number += 1
     return all_results
 
 def main():
     base_url = "https://datacvr.virk.dk/soegeresultater?fritekst=*&enhedstype=virksomhed&size=100"
-    results = fetch_page_data(base_url)
-    logging.info("Successfully retrieved all data.")
-    print(results)
+    results = fetch_all_data(base_url)
+    logging.info("Successfully retrieved all data. -_-")
 
 if __name__ == "__main__":
     main()
