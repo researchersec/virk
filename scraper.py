@@ -62,6 +62,7 @@ def fetch_page_data(page_url):
                 "status": status,
                 "company_type": company_type
             })
+            print(results)
         return results
     else:
         logging.error("Failed to fetch data.")
@@ -79,7 +80,6 @@ def fetch_all_data(base_url):
             break
         all_results.extend(page_data)
         logging.info(f"Data from page {page_number} fetched successfully.")
-        print(results)
         page_number += 1
     return all_results
 
