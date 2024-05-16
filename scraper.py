@@ -13,7 +13,7 @@ def fetch_page_data(page_url):
     data = {
         "cmd": "request.get",
         "url": page_url,
-        "maxTimeout": 300000  # Increase the max timeout to ensure the page loads completely
+        "maxTimeout": 300000  #Increase the max timeout to ensure the page loads completely
     }
     logging.info(f"Sending request to {page_url}.")
     response = requests.post(FLARE_SOLVERR_URL, headers=HEADERS, json=data)
