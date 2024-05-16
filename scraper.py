@@ -25,7 +25,7 @@ def fetch_page_data(page_url):
         logging.info("Response OK.")
         html = json_response["solution"]["response"]
         soup = BeautifulSoup(html, "lxml")
-
+        print(soup.prettify())
         # Save the full HTML response to a file for debugging
         with open('full_response.html', 'w', encoding='utf-8') as file:
             file.write(soup.prettify())
