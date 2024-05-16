@@ -25,7 +25,7 @@ def fetch_page_data(page_url):
         logging.info("Response OK.")
         html = json_response["solution"]["response"]
         soup = BeautifulSoup(html, "lxml")
-        print(soup.prettify())
+        #print(soup.prettify())
         # Save the full HTML response to a file for debugging
         with open('full_response.html', 'w', encoding='utf-8') as file:
             file.write(soup.prettify())
@@ -86,6 +86,7 @@ def main():
     base_url = "https://datacvr.virk.dk/soegeresultater?fritekst=*&enhedstype=virksomhed&size=100"
     results = fetch_page_data(base_url)
     logging.info("Successfully retrieved all data.")
+    print(results)
 
 if __name__ == "__main__":
     main()
