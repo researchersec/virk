@@ -26,8 +26,11 @@ def fetch_page_data(page_url):
         html = json_response["solution"]["response"]
         soup = BeautifulSoup(html, "lxml")
         #print(soup.prettify())
+        # Sanitize the page_url for the filename
+        safe_url = page_url.replace('/', '_').replace(':', '_').replace('?', '_').replace('=', '_').replace('&', '_')
+        filename = f'full_response-{safe_url}.html'
         # Save the full HTML response to a file for debugging
-        with open(f'full_response-{page_url}.html', 'w', encoding='utf-8') as file:
+        with open(filename, 'w', encoding='utf-8') as file:
             file.write(soup.prettify())
 
         # Check for the presence of JavaScript indicators
