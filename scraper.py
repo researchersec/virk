@@ -18,7 +18,7 @@ def fetch_page_data(page_url):
     logging.info(f"Sending request to {page_url}.")
     response = requests.post(FLARE_SOLVERR_URL, headers=HEADERS, json=data)
     logging.info("Received response from FlareSolverr.")
-    time.sleep(10)
+    time.sleep(30)
     
     json_response = response.json()
     if json_response.get("status") == "ok":
