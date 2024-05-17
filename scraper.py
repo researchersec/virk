@@ -87,7 +87,7 @@ def fetch_all_data(base_url):
     return all_results
 
 def main():
-    base_url = "https://datacvr.virk.dk/soegeresultater?fritekst=*&enhedstype=virksomhed&size=100"
+    base_url = "https://datacvr.virk.dk/soegeresultater?fritekst=*&enhedstype=virksomhed&size=10"
     results = fetch_all_data(base_url)
     logging.info("Successfully retrieved all data. -_-")
 
