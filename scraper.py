@@ -99,29 +99,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-        logging.error("Failed to fetch data.")
-        return None
-
-def fetch_all_data(base_url):
-    """Fetch data across multiple pages."""
-    all_results = []
-    page_number = 0
-    while True:
-        page_url = f"{base_url}&sideIndex={page_number}"
-        page_data = fetch_page_data(page_url)
-        if not page_data:
-            logging.info("No more data to fetch, stopping.")
-            break
-        all_results.extend(page_data)
-        logging.info(f"Data from page {page_number} fetched successfully.")
-        page_number += 1
-    return all_results
-
-def main():
-    base_url = "https://datacvr.virk.dk/soegeresultater?fritekst=*&enhedstype=virksomhed&size=10"
-    results = fetch_all_data(base_url)
-    logging.info("Successfully retrieved all data. -_-")
-
-if __name__ == "__main__":
-    main()
