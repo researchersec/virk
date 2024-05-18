@@ -19,7 +19,7 @@ def create_table():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             company_name TEXT,
             address TEXT,
-            cvr_number TEXT,
+            cvr_number TEXT UNIQUE,
             status TEXT,
             company_type TEXT
         )
@@ -27,15 +27,25 @@ def create_table():
     conn.commit()
     conn.close()
 
+def company_exists(cvr_number):
+    """Check if a company with the given CVR number already exists in the database."""
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+    cursor.execute('SELECT COUNT(1) FROM companies WHERE cvr_number = ?', (cvr_number,))
+    exists = cursor.fetchone()[0]
+    conn.close()
+    return exists > 0
+
 def insert_data(data):
     """Insert data into the SQLite database."""
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
     for item in data:
-        cursor.execute('''
-            INSERT INTO companies (company_name, address, cvr_number, status, company_type)
-            VALUES (?, ?, ?, ?, ?)
-        ''', (item['company_name'], item['address'], item['cvr_number'], item['status'], item['company_type']))
+        if not company_exists(item['cvr_number']):
+            cursor.execute('''
+                INSERT INTO companies (company_name, address, cvr_number, status, company_type)
+                VALUES (?, ?, ?, ?, ?)
+            ''', (item['company_name'], item['address'], item['cvr_number'], item['status'], item['company_type']))
     conn.commit()
     conn.close()
 
@@ -69,7 +79,7 @@ def fetch_page_data(page_url, max_retries=3, delay=5):
                 table = soup.find("div", class_="soegeresultaterTabel")
                 if not table:
                     logging.error("The data table was not found in the HTML.")
-                    return None
+                    raise ValueError("Data table not found")
 
                 rows = table.find_all("div", class_="row")
                 results = []
@@ -109,8 +119,12 @@ def fetch_all_data(base_url):
         page_url = f"{base_url}&sideIndex={page_number}"
         page_data = fetch_page_data(page_url)
         if not page_data:
-            logging.info("No more data to fetch, stopping.")
-            break
+            if page_number == 0:
+                logging.error("Failed to fetch data from the first page. Stopping.")
+                break
+            else:
+                logging.info("No more data to fetch, stopping.")
+                break
         all_results.extend(page_data)
         logging.info(f"Data from page {page_number} fetched successfully.")
         page_number += 1
