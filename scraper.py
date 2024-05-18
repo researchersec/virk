@@ -2,11 +2,42 @@ import requests
 from bs4 import BeautifulSoup
 import logging
 import time
+import sqlite3
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 FLARE_SOLVERR_URL = "http://localhost:8191/v1"
 HEADERS = {"Content-Type": "application/json"}
+DB_NAME = 'companies.db'
+
+def create_table():
+    """Create the table in the SQLite database if it doesn't exist."""
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS companies (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            company_name TEXT,
+            address TEXT,
+            cvr_number TEXT,
+            status TEXT,
+            company_type TEXT
+        )
+    ''')
+    conn.commit()
+    conn.close()
+
+def insert_data(data):
+    """Insert data into the SQLite database."""
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+    for item in data:
+        cursor.execute('''
+            INSERT INTO companies (company_name, address, cvr_number, status, company_type)
+            VALUES (?, ?, ?, ?, ?)
+        ''', (item['company_name'], item['address'], item['cvr_number'], item['status'], item['company_type']))
+    conn.commit()
+    conn.close()
 
 def fetch_page_data(page_url, max_retries=3, delay=5):
     """Fetch data for a single page with retry mechanism."""
@@ -26,13 +57,6 @@ def fetch_page_data(page_url, max_retries=3, delay=5):
                 logging.info("Response OK.")
                 html = json_response["solution"]["response"]
                 soup = BeautifulSoup(html, "lxml")
-                
-                # Sanitize the page_url for the filename
-                safe_url = page_url.replace('/', '_').replace(':', '_').replace('?', '_').replace('=', '_').replace('&', '_')
-                filename = f'full_response-{safe_url}.html'
-                # Save the full HTML response to a file for debugging
-                with open(filename, 'w', encoding='utf-8') as file:
-                    file.write(soup.prettify())
 
                 # Check for the presence of JavaScript indicators
                 scripts = soup.find_all('script')
@@ -66,7 +90,7 @@ def fetch_page_data(page_url, max_retries=3, delay=5):
                         "status": status,
                         "company_type": company_type
                     })
-                print(results)
+                insert_data(results)
                 return results
             else:
                 logging.error(f"Failed to fetch data, attempt {attempt + 1}.")
@@ -93,6 +117,7 @@ def fetch_all_data(base_url):
     return all_results
 
 def main():
+    create_table()
     base_url = "https://datacvr.virk.dk/soegeresultater?fritekst=*&enhedstype=virksomhed&size=10"
     results = fetch_all_data(base_url)
     logging.info("Successfully retrieved all data. -_-")
