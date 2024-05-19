@@ -132,7 +132,7 @@ def fetch_all_data(base_url):
 
 def main():
     create_table()
-    base_url = "https://datacvr.virk.dk/soegeresultater?fritekst=*&enhedstype=virksomhed&size=999"
+    base_url = "https://datacvr.virk.dk/soegeresultater?fritekst=*&enhedstype=virksomhed&size=200"
     results = fetch_all_data(base_url)
     logging.info("Successfully retrieved all data. -_-")
 
