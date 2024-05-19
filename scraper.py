@@ -114,7 +114,7 @@ def fetch_page_data(page_url, max_retries=3, delay=5):
 def fetch_all_data(base_url):
     """Fetch data across multiple pages."""
     all_results = []
-    page_number = 274
+    page_number = 0
     while True:
         page_url = f"{base_url}&sideIndex={page_number}"
         page_data = fetch_page_data(page_url)
@@ -132,7 +132,7 @@ def fetch_all_data(base_url):
 
 def main():
     create_table()
-    base_url = "https://datacvr.virk.dk/soegeresultater?fritekst=*&enhedstype=virksomhed&size=10"
+    base_url = "https://datacvr.virk.dk/soegeresultater?fritekst=*&enhedstype=virksomhed&size=100"
     results = fetch_all_data(base_url)
     logging.info("Successfully retrieved all data. -_-")
 
