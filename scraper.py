@@ -54,7 +54,7 @@ def fetch_page_data(page_url, max_retries=5, delay=5):
     data = {
         "cmd": "request.get",
         "url": page_url,
-        "maxTimeout": 3000  # Increase the max timeout to ensure the page loads completely
+        "maxTimeout": 60000  # Increase the max timeout to ensure the page loads completely
     }
     for attempt in range(max_retries):
         try:
