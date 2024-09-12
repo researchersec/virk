@@ -30,7 +30,8 @@ jobs:
       run: pip install lxml
 
     - name: Pull Docker image
-      run: docker pull 21hsmw/flaresolverr:nodriver
+      run: docker pull 21hsmw/flaresolverr:fixlooping
+      #21hsmw/flaresolverr:nodriver
       #ghcr.io/flaresolverr/flaresolverr:v3.3.21
       #run: docker pull ghcr.io/flaresolverr/flaresolverr:latest
       #ghcr.io/flaresolverr/flaresolverr:latest
@@ -40,7 +41,7 @@ jobs:
         -e LOG_LEVEL=debug \
         -e LOG_HTML=true \
         -e BROWSER_TIMEOUT=200000 \
-        21hsmw/flaresolverr:nodriver
+        21hsmw/flaresolverr:fixlooping
 
     - name: Wait for FlareSolverr to start
       run: sleep 20
