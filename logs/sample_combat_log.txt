@@ -1,0 +1,24 @@
+12/15 20:30:15.123 ENCOUNTER_START,1001,Ragnaros,1,0
+12/15 20:30:15.234 Warrior hits Ragnaros for 1500
+12/15 20:30:15.345 Mage crits Ragnaros for 2500
+12/15 20:30:15.456 Priest heals Warrior for 800
+12/15 20:30:15.567 Ragnaros hits Warrior for 1200
+12/15 20:30:15.678 Paladin heals Warrior for 600
+12/15 20:30:15.789 Warrior gains Battle Shout
+12/15 20:30:15.890 Mage gains Arcane Intellect
+12/15 20:30:16.001 Ragnaros is afflicted by Sunder Armor
+12/15 20:30:16.112 Warrior hits Ragnaros for 1800
+12/15 20:30:16.223 Mage crits Ragnaros for 3000
+12/15 20:30:16.334 Priest heals Mage for 500
+12/15 20:30:16.445 Ragnaros hits Paladin for 1500
+12/15 20:30:16.556 Paladin heals Paladin for 400
+12/15 20:30:16.667 Warrior dies
+12/15 20:30:16.778 Priest heals Warrior for 1200
+12/15 20:30:16.889 Mage crits Ragnaros for 2800
+12/15 20:30:17.000 Ragnaros hits Priest for 1100
+12/15 20:30:17.111 Paladin heals Priest for 800
+12/15 20:30:17.222 Warrior hits Ragnaros for 1600
+12/15 20:30:17.333 Mage crits Ragnaros for 3200
+12/15 20:30:17.444 Priest heals Warrior for 900
+12/15 20:30:17.555 Ragnaros dies
+12/15 20:30:17.666 ENCOUNTER_END,1001,Ragnaros,1,120
